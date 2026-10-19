@@ -8,7 +8,7 @@
 ------------------------------
 ## Individual Contributions
 
-## Member Name 1 (@github_handle)
+## Amit Pal (@21f1006870)
 
 * **Done:**
     * Bullet points go here.
@@ -17,7 +17,7 @@
 * **Blockers:**
     * None (or specify what/who you are waiting on).
 
-## Member Name 2 (@github_handle)
+## Himanshu Saini (@thehimanshhu)
 
 * **Done:**
     * Bullet points go here.
@@ -26,7 +26,7 @@
 * **Blockers:**
     * None (or specify what/who you are waiting on).
 
-## Member Name 3 (@github_handle)
+## Tarika (@22f3002758)
 
 * **Done:**
     * Bullet points go here.
@@ -35,7 +35,7 @@
 * **Blockers:**
     * None (or specify what/who you are waiting on).
 
-## Member Name 4 (@github_handle)
+## Vikram Singh Negi (@lostvikx)
 
 * **Done:**
     * Bullet points go here.
