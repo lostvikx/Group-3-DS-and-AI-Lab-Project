@@ -23,7 +23,7 @@
 
 ## Vikram Singh Negi (@lostvikx)
 
-- Performed detailed literature review.
-- Narrowed down and re-worded the problem statement.
-- Identified past research papers relevant to project.
 - Created GitHub repository with branches.
+- Narrowed down and refined the problem statement.
+- Identified past research papers relevant to project.
+- Performed detailed literature review by comparing existing works.
