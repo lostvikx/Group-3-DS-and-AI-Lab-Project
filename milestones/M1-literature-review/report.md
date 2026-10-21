@@ -68,7 +68,11 @@ Here are the cases and reports we found, newest first, followed by the surveys a
 
 ### 6.1 Evolution of Acoustic Deepfake Detection
 
-Zero-shot text-to-speech (TTS), neural voice conversion (VC), and flow-matching vocoders have made realistic voice cloning widely accessible, reducing human listener detection accuracy to 73.00% on average and near chance under mobile compression (Zhang et al., 2025; Li et al., 2025). Acoustic countermeasures have progressed through three generations (Yi et al., 2023; Zhang et al., 2025):
+- **Accessibility of Voice Cloning:** Recent advancements in zero-shot text-to-speech (TTS), neural voice conversion (VC), and flow-matching vocoders have democratized high-fidelity voice cloning.
+- **Impact on Human Perception:**
+  - Average listener detection accuracy drops to **73.00%** (Zhang et al., 2025; Li et al., 2025).
+  - Under mobile compression, human detection degrades to **near-chance levels**.
+- **Evolution of Defenses:** Acoustic countermeasures have advanced across three distinct generations to address these emerging threats (Yi et al., 2023; Zhang et al., 2025).
 
 | Approach                                                          | Models / Frontend                                                                                                                                          | Performance (EER)                                                                                          | Limitations / Advantages                                                                                                                     |
 | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -78,11 +82,22 @@ Zero-shot text-to-speech (TTS), neural voice conversion (VC), and flow-matching 
 
 ### 6.2 Cross-Lingual Generalization and Telephony Robustness
 
-Recent multilingual corpora: including MLAAD, SpeechFake, IndicFake, SEA-Spoof, IndicSynth, and LRLspoof demonstrate that language mismatch and commercial synthesis APIs are major sources of domain shift. Monolingual English detectors degrade to 20.25% EER on unseen Hindi in SpeechFake and 64.50%–68.60% EER on commercial Hindi and Tamil synthesis in SEA-Spoof. Replacing scratch encoders with `XLS-R` lowers unseen Hindi EER by 95% relative (to 0.98%), and fine-tuning on regional Indic data reduces Hindi and Tamil EER below 0.10%. Furthermore, PSTN, VoIP, and messaging codecs (8 kHz A-law, μ-law, AMR-WB, Opus) attenuate frequencies above 3.4–4.0 kHz where neural vocoder artifacts reside, necessitating explicit telephony augmentation during training.
+- **Domain Shift Drivers:** Recent multilingual corpora (MLAAD, SpeechFake, IndicFake, SEA-Spoof, IndicSynth, and LRLspoof) show that language mismatch and commercial synthesis APIs cause severe domain shift.
+- **Monolingual Degradation:** English-trained detectors suffer steep performance drops on Indic speech:
+- **SpeechFake:** Degrades to **20.25% EER** on unseen Hindi.
+- **SEA-Spoof:** Degrades to **64.50%–68.60% EER** on commercial Hindi and Tamil synthesis.
+
+- **Mitigation via Representation & Fine-Tuning:**
+- Swapping scratch encoders for `XLS-R` cuts unseen Hindi EER by **95% relative** (down to **0.98%**).
+- Fine-tuning on regional Indic data drives both Hindi and Tamil EER below **0.10%**.
+
+- **Telephony Channel Challenges:** Common codecs across PSTN, VoIP, and messaging (8 kHz A-law, μ-law, AMR-WB, Opus) cut off frequencies above 3.4–4.0 kHz—masking key neural vocoder artifacts and making explicit telephony augmentation during training essential.
 
 ### 6.3 Conversational Scam Detection and Commercial Defenses
 
-Existing fraud defenses operate on isolated modalities. Enterprise telecom suites and consumer call scanners detect synthetic voice liveness or caller-ID reputation without analyzing conversational scam semantics in Indian vernaculars. Conversely, text-based conversational fraud detectors trained on benchmarks such as ICFD-31k use fine-tuned transformers (`BERT`, `RoBERTa`, `XLM-R`) to flag coercive scam intent (achieving 99.40% in-domain F1 and 92.97% unseen-fraud F1) but cannot detect whether the caller's voice is AI-cloned.
+- **Siloed Defenses:** Current fraud protection tools operate in isolated modalities rather than assessing threat vectors holistically.
+- **Acoustic & Metadata Gaps:** Enterprise telecom suites and consumer call apps focus on caller-ID reputation or synthetic voice liveness, but overlook scam semantics and intent in Indian vernacular languages.
+- **Semantic Gaps:** Text-based fraud detectors trained on datasets like ICFD-31k use fine-tuned transformers (`BERT`, `RoBERTa`, `XLM-R`) to effectively spot coercive scam intent (**99.40%** in-domain F1; **92.97%** unseen-fraud F1), but cannot verify if the incoming voice is an AI-generated clone.
 
 ### 6.4 Comparison of Existing Literature
 
@@ -125,10 +140,20 @@ The proposed system introduces a decoupled, end-to-end multimodal pipeline for E
 3. **Low-Latency Multilingual ASR and Scam Classification:** Transcribes audio using CTranslate2-accelerated `faster-whisper` (Radford et al., 2023; SYSTRAN, 2023) with INT8 quantization, targeting approximately 4× speedup over standard Whisper. Transcript semantics are then analyzed to produce a calibrated scam probability ($P_{\text{scam}}$) and a textual rationale.
 
 4. **Four-Quadrant Multimodal Decision Fusion:** Combines ($P_{\text{spoof}}$) and ($P_{\text{scam}}$) to distinguish four categories:
-   - **AI-Cloned Voice Scams:** High $P_{\text{spoof}}$, high $P_{\text{scam}}$.
-   - **Human Vishing Scams:** Low $P_{\text{spoof}}$, high $P_{\text{scam}}$.
-   - **Benign Automated TTS/IVR:** High $P_{\text{spoof}}$, low $P_{\text{scam}}$.
-   - **Authentic Safe Speech:** Low $P_{\text{spoof}}$, low $P_{\text{scam}}$.
+
+| Category                       | Spoof Probability ($P_{\text{spoof}}$) | Scam Probability ($P_{\text{scam}}$) | Description / Typical Source                                           |
+| ------------------------------ | -------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------- |
+| **AI-Cloned Voice Scams**      | High                                   | High                                 | Deepfake / synthetic speech combined with malicious intent             |
+| **Human Vishing Scams**        | Low                                    | High                                 | Authentic human caller executing social engineering / fraud            |
+| **Benign Automated TTS / IVR** | High                                   | Low                                  | Legitimate synthesized voice (customer service, appointment reminders) |
+| **Authentic Safe Speech**      | Low                                    | Low                                  | Legitimate, human-to-human benign communication                        |
+
+A compact 2×2 matrix layout:
+
+|                             | **High $P_{\text{scam}}$** | **Low $P_{\text{scam}}$**      |
+| --------------------------- | -------------------------- | ------------------------------ |
+| **High $P_{\text{spoof}}$** | **AI-Cloned Voice Scams**  | **Benign Automated TTS / IVR** |
+| **Low $P_{\text{spoof}}$**  | **Human Vishing Scams**    | **Authentic Safe Speech**      |
 
 ### 7.3 Provisional Datasets and Baselines for Evaluation
 
