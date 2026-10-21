@@ -1,6 +1,6 @@
 # Deepfake Voice and Scam Detection Using Deep Learning
 
-## Problem Statement
+## 1. Problem Statement
 
 AI-generated voices are making phone and voice-message scams harder to spot, especially in multilingual regions like India. Most people cannot tell a cloned voice from a real one, and manual verification is unreliable.
 
@@ -20,11 +20,11 @@ The system must:
 
 The system also gives a scam verdict, and users can check suspicious calls and voice messages through a simple web app and Telegram bot. Beyond binary classification, it tests how well detection holds up across languages, unseen generators and real-world conditions.
 
-## Current Status of Deepfake Voice Scams
+## 2. Current Status of Deepfake Voice Scams
 
 Here are the cases and reports we found, newest first, followed by the surveys and trend reports.
 
-### Individual case reports
+### 2.1 Individual case reports
 
 - Mumbai senior citizen, 69, loses ₹50 lakh in an AI voice-cloning scam where the caller mimicked a respected community figure (Oct 2026) [[Report](https://www.freepressjournal.in/mumbai/mumbai-cyber-fraud-69-year-old-senior-citizen-loses-50-lakh-in-ai-voice-cloning-scam)]
 - Indore resident loses ₹1.83 lakh after an AI-generated voice posed as his brother-in-law in Sydney, claiming he faced jail over an expired visa (Jul 2026) [[Report](https://incidentdatabase.ai/cite/1566/)]
@@ -32,15 +32,15 @@ Here are the cases and reports we found, newest first, followed by the surveys a
 - Powai businessman loses ₹80,000 after fraudsters played his son's cloned voice pleading for bail, posing as the Indian Embassy in Dubai (2024) [[Report](https://incidentdatabase.ai/reports/5140)]
 - Delhi and Noida parents get calls with cloned "child's voice" crying for help, one threatening a false rape case against an MBA student [[Report](https://www.tabla.com.sg/news/india/scammers-use-ai-to-clone-kids-voices)]
 
-### Surveys and trend reports
+### 2.2 Surveys and trend reports
 
 - McAfee report finds 83% of Indian AI voice-scam victims lost money, and 69% of Indians can't tell a cloned voice from a real one [[Report](https://www.boomlive.in/amp/explainers/ai-voice-scam-voice-cloning-mcafee-report-21851)]
 - About 47% of Indian adults have experienced or know someone who experienced an AI voice scam; tools can clone a voice from three seconds of audio [[Report](https://businessworld.in/article/ai-voice-scams-more-prevalent-in-india-affects-almost-50-indians-mcafee-report-475192)]
 - Aggregator summary reports a 450% rise in voice-cloning fraud complaints to Haryana's cyber cell in Q4 2025, and ₹22,846 crore in cyber-fraud losses in 2024 [[Report](https://threatcluster.io/cluster/ai-voice-cloning-scams-surge-in-india-124ab5b6)]
 
-## Scope and Boundaries
+## 3. Scope and Boundaries
 
-### In Scope
+### 3.1 In Scope
 
 - Detecting AI-generated (deepfake) speech in English, Hindi, Tamil and Telugu
 - Building a dataset of real speech and AI-generated voices from multiple generators, including clean and phone-quality audio
@@ -50,7 +50,7 @@ Here are the cases and reports we found, newest first, followed by the surveys a
 - Delivering a simple web application and Telegram bot for uploading audio and viewing results (fake probability, highlighted segments, scam verdict)
 - Transcribing speech and using NLP to flag scam patterns (requests for money, OTPs, personal information, urgent payments)
 
-### Out of Scope
+### 3.2 Out of Scope
 
 - Languages beyond English, Hindi, Tamil and Telugu
 - Real-time detection during live phone calls, and integration with telecom networks or dialer apps
@@ -60,13 +60,13 @@ Here are the cases and reports we found, newest first, followed by the surveys a
 - Production-grade deployment, large-scale infrastructure and mobile apps
 - Legal or forensic certification of results
 
-## Stakeholders
+## 4. Stakeholders
 
-## Project Objectives
+## 5. Project Objectives
 
-## Literature Review
+## 6. Literature Review
 
-### Evolution of Acoustic Deepfake Detection
+### 6.1 Evolution of Acoustic Deepfake Detection
 
 Zero-shot text-to-speech (TTS), neural voice conversion (VC), and flow-matching vocoders have made realistic voice cloning widely accessible, reducing human listener detection accuracy to 73.00% on average and near chance under mobile compression (Zhang et al., 2025; Li et al., 2025). Acoustic countermeasures have progressed through three generations (Yi et al., 2023; Zhang et al., 2025):
 
@@ -76,15 +76,15 @@ Zero-shot text-to-speech (TTS), neural voice conversion (VC), and flow-matching 
 | End-to-End Waveform and Graph Networks                            | `RawNet2` with learnable `SincNet` filterbanks; `AASIST` with spectro-temporal graph attention                                                             | 0.83% on clean English; 29.12% on crowdsourced ASVspoof 5; 43.32% on multilingual Asian speech             | Learn directly from raw waveforms, but unaugmented models overfit to training codecs and languages, limiting cross-domain generalization.    |
 | Self-Supervised Cross-Lingual Frontends with Channel Augmentation | `wav2vec 2.0 XLS-R-300M`, pretrained on 436,000 hours across 128 languages, combined with `RawBoost` noise augmentation and codec simulation               | 0.82%–1.00% on ASVspoof 2021 LA (telephony); 2.85% on ASVspoof 2021 DF (compressed speech)                 | Captures language-invariant vocal-tract dynamics. Channel augmentation and codec simulation improve robustness to telephony and compression. |
 
-### Cross-Lingual Generalization and Telephony Robustness
+### 6.2 Cross-Lingual Generalization and Telephony Robustness
 
 Recent multilingual corpora: including MLAAD, SpeechFake, IndicFake, SEA-Spoof, IndicSynth, and LRLspoof demonstrate that language mismatch and commercial synthesis APIs are major sources of domain shift. Monolingual English detectors degrade to 20.25% EER on unseen Hindi in SpeechFake and 64.50%–68.60% EER on commercial Hindi and Tamil synthesis in SEA-Spoof. Replacing scratch encoders with `XLS-R` lowers unseen Hindi EER by 95% relative (to 0.98%), and fine-tuning on regional Indic data reduces Hindi and Tamil EER below 0.10%. Furthermore, PSTN, VoIP, and messaging codecs (8 kHz A-law, μ-law, AMR-WB, Opus) attenuate frequencies above 3.4–4.0 kHz where neural vocoder artifacts reside, necessitating explicit telephony augmentation during training.
 
-### Conversational Scam Detection and Commercial Defenses
+### 6.3 Conversational Scam Detection and Commercial Defenses
 
 Existing fraud defenses operate on isolated modalities. Enterprise telecom suites and consumer call scanners detect synthetic voice liveness or caller-ID reputation without analyzing conversational scam semantics in Indian vernaculars. Conversely, text-based conversational fraud detectors trained on benchmarks such as ICFD-31k use fine-tuned transformers (`BERT`, `RoBERTa`, `XLM-R`) to flag coercive scam intent (achieving 99.40% in-domain F1 and 92.97% unseen-fraud F1) but cannot detect whether the caller's voice is AI-cloned.
 
-### Comparison of Existing Literature
+### 6.4 Comparison of Existing Literature
 
 | Study                                                                  | Approach                                                                                                    | Data Used                                                                                   | Metrics Reported                                                                                                          | Limitations                                                                                                                                  |
 | :--------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -104,13 +104,68 @@ Existing fraud defenses operate on isolated modalities. Enterprise telecom suite
 | Ahuja et al. (2026)                                                    | `ICFD-31k` streaming conversational fraud benchmark with fine-tuned `RoBERTa` and LLMs                      | ICFD-31k (>31,000 Indian English & Hinglish conversations across 10 fraud categories)       | `RoBERTa` achieves 99.40% F1 (in-domain full call) and 92.97% F1 (unseen fraud categories)                                | Text-only benchmark; blind to acoustic voice cloning; excludes Tamil and Telugu scripts                                                      |
 | Commercial Suites (Pindrop, 2026; Resemble AI, 2026; Truecaller, 2026) | Proprietary acoustic liveness (`Pindrop Pulse`, `Resemble DETECT`) and mobile call screening (`Truecaller`) | Enterprise contact-center trunks and cellular call streams                                  | 98.05%–99.47% reported accuracy at 0.12–0.40 s latency (enterprise APIs)                                                  | Closed-source or paid apps; binary alerts without segment timestamps; cannot analyze forwarded messaging voice notes or Indic scam semantics |
 
-## Gap Analysis
+## 7. Gap Analysis and Proposed Methodology
 
-## Key Differences
+### 7.1 Research Gaps in Existing Work
 
-## Opportunities
+1. **Orthogonality of Voice Authenticity and Scam Intent:** Acoustic deepfake models detect whether a voice is synthetic, causing false alarms on legitimate automated speech (e.g., banking IVR reminders, transit alerts, and accessibility TTS) while missing scams conducted by real humans. Conversely, text-only fraud detectors (Ahuja et al., 2026) cannot identify whether an impersonated family member or official is using an AI voice clone.
 
-## References
+2. **Cross-Lingual and Telephony Degradation in Indian Languages:** Detectors trained on clean English studio recordings often fail on code-switched Indian languages (English, Hindi, Tamil, and Telugu) and narrowband 8 kHz PSTN/VoIP or messaging codecs (Opus, AMR-WB), which can remove high-frequency vocoder artifacts (Maltby et al., 2026; Wu et al., 2025).
+
+3. **Lack of Segment-Level Localization for Variable-Length Audio:** Existing regional models often truncate recordings to fixed 2–4-second windows (Ghotekar et al., 2025; Tak et al., 2022b), losing context from longer calls and producing opaque clip-level scores instead of highlighting suspicious segments.
+
+### 7.2 How the Proposed Approach Addresses These Gaps
+
+The proposed system introduces a decoupled, end-to-end multimodal pipeline for English, Hindi, Tamil, and Telugu, accessible through a web application and a Telegram bot.
+
+1. **Cross-Lingual Acoustic Detector with Telephony Augmentation:** Fine-tunes `wav2vec 2.0 XLS-R-300M` (Babu et al., 2022) using on-the-fly `RawBoost` noise injection (Tak et al., 2022b) and narrowband 8 kHz PSTN/VoIP and Opus codec simulation to improve robustness under mobile compression.
+
+2. **Sliding-Window Temporal Localization:** Divides arbitrary-length audio into 3–4-second windows with 50% overlap and a stride of 1.5–2.0 seconds. The system aggregates window scores ($p_k$) to produce a global spoofing probability ($P_{\text{spoof}}$) and a timestamped heatmap identifying the windows that triggered an alert.
+
+3. **Low-Latency Multilingual ASR and Scam Classification:** Transcribes audio using CTranslate2-accelerated `faster-whisper` (Radford et al., 2023; SYSTRAN, 2023) with INT8 quantization, targeting approximately 4× speedup over standard Whisper. Transcript semantics are then analyzed to produce a calibrated scam probability ($P_{\text{scam}}$) and a textual rationale.
+
+4. **Four-Quadrant Multimodal Decision Fusion:** Combines ($P_{\text{spoof}}$) and ($P_{\text{scam}}$) to distinguish four categories:
+   - **AI-Cloned Voice Scams:** High $P_{\text{spoof}}$, high $P_{\text{scam}}$.
+   - **Human Vishing Scams:** Low $P_{\text{spoof}}$, high $P_{\text{scam}}$.
+   - **Benign Automated TTS/IVR:** High $P_{\text{spoof}}$, low $P_{\text{scam}}$.
+   - **Authentic Safe Speech:** Low $P_{\text{spoof}}$, low $P_{\text{scam}}$.
+
+### 7.3 Provisional Datasets and Baselines for Evaluation
+
+#### 7.3.1 Provisional Datasets
+
+- **Acoustic Anti-Spoofing:**
+  - **IndicSynth** (Sharma et al., 2025): Hindi, Tamil, and Telugu.
+  - **SEA-Spoof** (Wu et al., 2025): Hindi, Tamil, and commercial/open-source TTS.
+  - **SpeechFake** (Huang et al., 2025): English, Hindi, Tamil, and Telugu.
+  - **ASVspoof 2019/2021 LA & DF:** English anti-spoofing benchmarks.
+  - **LRLspoof** (Borodin et al., 2026): Zero-shot out-of-domain evaluation.
+
+  The datasets will be combined into stratified multilingual subsets, with telephony and codec conditions included where supported.
+
+- **Conversational Scam Intent:**
+  - **ICFD-31k** (Ahuja et al., 2026): More than 31,000 annotated Indian English and Hinglish fraud/benign conversations across 10 scam categories.
+  - Tamil and Telugu scam transcripts will be supplemented with translated and synthetic examples.
+
+#### 7.3.2 Provisional Baselines and Metrics
+
+- **Acoustic Baselines:** The proposed model will be evaluated against:
+  - `LFCC-LCNN`: Classical spectral-feature baseline.
+  - `RawNet2` (Tak et al., 2022b): End-to-end waveform baseline.
+  - `AASIST` (Jung et al., 2022): Graph-attention baseline.
+
+  **Evaluation metrics:** Equal Error Rate (EER %), minimum normalized tandem Detection Cost Function ($\min\text{-tDCF}$), Spoof Rejection Rate (SRR %), window-level F1, and temporal Intersection over Union (IoU).
+
+- **Semantic and Fusion Baselines:** Three NLP approaches will be compared:
+  - `TF-IDF + Linear SVM`: Lexical baseline.
+  - `BERT` and `XLM-R-Base` (Devlin et al., 2019; Conneau et al., 2020): Fine-tuned transformer baselines.
+  - `Zero-Shot LLM`: Large language model classification baseline.
+
+  These approaches will be compared with unimodal acoustic-only and text-only pipelines using **Precision, Recall, Macro-F1, and AUROC**. ASR performance and efficiency will be measured using **Word Error Rate (WER %)** and **Real-Time Factor (RTF)**.
+
+## 8. Key Differences
+
+## 9. References
 
 - Ahuja, R., Prateek, K., & Singh, S. (2026). ICFD-31k: A large-scale dataset and benchmark for real-time conversational fraud detection. In _Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)_ (pp. 7065–7073). International Joint Conferences on Artificial Intelligence Organization. https://rishia.in/pub/ahuja2026icfd31k
 - Babu, A., Wang, C., Tjandra, A., Lakhotia, K., Xu, Q., Goyal, N., Singh, K., von Platen, P., Saraf, Y., Pino, J., Baevski, A., Conneau, A., & Auli, M. (2022). XLS-R: Self-supervised cross-lingual speech representation learning at scale. In _Proceedings of INTERSPEECH 2022_ (pp. 2278–2282). ISCA. https://arxiv.org/abs/2111.09296
