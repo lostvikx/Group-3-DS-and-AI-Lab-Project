@@ -1,7 +1,7 @@
 # Deepfake Voice and Scam Detection Using Deep Learning
 
 <div align="center">
-  <img src="architecture.png" alt="Proposed System Workflow Architecture" width="800">
+  <img src="architecture_diagram.png" alt="Proposed System Workflow Architecture" width="800">
   <br>
   <em>Figure 1: High-level architecture of the proposed deepfake voice and scam detection system.</em>
 </div>
