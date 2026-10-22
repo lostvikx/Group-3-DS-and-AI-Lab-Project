@@ -62,7 +62,29 @@ Here are the cases and reports we found, newest first, followed by the surveys a
 
 ## 4. Stakeholders
 
+| Stakeholder                                                  | How They Are Affected                                                                                        |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **General public / phone users**                             | Main targets of voice-cloning scams; risk financial loss and need a simple way to verify calls and messages. |
+| **Elderly and non-technical users**                          | Most vulnerable to impersonation scams; need clear, simple verdicts.                                         |
+| **Multilingual communities (English, Hindi, Tamil, Telugu)** | Often underserved by English-centric detectors; poor accuracy leaves them exposed.                           |
+| **Banks and fintech providers**                              | Face fraud losses from voice-based social engineering; can use detection to protect customers.               |
+| **Telecom operators**                                        | Their networks carry scam calls; need detection that works on phone-quality audio.                           |
+| **Law enforcement**                                          | Need reliable, explainable evidence to triage and investigate cases.                                         |
+| **Regulators and policymakers**                              | Need evidence of detector robustness across languages and generators to shape policy.                        |
+| **Journalists and fact-checkers**                            | Must verify audio authenticity; segment highlights support their work.                                       |
+| **People whose voices are cloned**                           | Risk misuse of their voice and reputational harm from false "AI-generated" flags.                            |
+| **TTS developers and platforms**                             | Their generators are detection targets; detectors must keep pace with new models.                            |
+| **Researchers and ML community**                             | Gain benchmarks for cross-lingual, cross-generator deepfake detection.                                       |
+| **Project developers**                                       | Build and maintain the system, including model updates and privacy handling of user audio.                   |
+
 ## 5. Project Objectives
+
+- **Detect AI-generated speech:** Output a probability that a clip is AI-generated, with an Equal Error Rate (EER) ≤ 10% on test data in English, Hindi, Tamil and Telugu.
+- **Generalize to unseen generators:** Keep EER ≤ 20% on held-out voice generators not seen in training, evaluated with leave-one-generator-out testing.
+- **Generalize across languages:** Keep the EER gap between each language and the best-performing language ≤ 10 percentage points, with per-language results reported.
+- **Explain decisions:** Highlight the audio segments that influenced each prediction, and verify that removing them lowers the AI-generated score in at least 80% of correctly flagged clips.
+- **Flag scams from audio and content:** Transcribe speech and combine content analysis with the detection score to give a scam verdict, targeting F1 ≥ 0.85 on a labelled scam/non-scam test set across all four languages.
+- **Deliver accessible tools:** Provide a web app and Telegram bot that return a verdict, probability and highlighted segments within 30 seconds for a 1-minute clip.
 
 ## 6. Literature Review
 
@@ -141,12 +163,12 @@ The proposed system introduces a decoupled, end-to-end multimodal pipeline for E
 
 4. **Four-Quadrant Multimodal Decision Fusion:** Combines ($P_{\text{spoof}}$) and ($P_{\text{scam}}$) to distinguish four categories:
 
-| Category                       | Spoof Probability ($P_{\text{spoof}}$) | Scam Probability ($P_{\text{scam}}$) | Description / Typical Source                                           |
-| ------------------------------ | -------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------- |
-| **AI-Cloned Voice Scams**      | High                                   | High                                 | Deepfake / synthetic speech combined with malicious intent             |
-| **Human Vishing Scams**        | Low                                    | High                                 | Authentic human caller executing social engineering / fraud            |
-| **Benign Automated TTS / IVR** | High                                   | Low                                  | Legitimate synthesized voice (customer service, appointment reminders) |
-| **Authentic Safe Speech**      | Low                                    | Low                                  | Legitimate, human-to-human benign communication                        |
+| Category                       | $P_{\text{spoof}}$ | $P_{\text{scam}}$ | Description / Typical Source                                           |
+| ------------------------------ | ------------------ | ----------------- | ---------------------------------------------------------------------- |
+| **AI-Cloned Voice Scams**      | High               | High              | Deepfake / synthetic speech combined with malicious intent             |
+| **Human Vishing Scams**        | Low                | High              | Authentic human caller executing social engineering / fraud            |
+| **Benign Automated TTS / IVR** | High               | Low               | Legitimate synthesized voice (customer service, appointment reminders) |
+| **Authentic Safe Speech**      | Low                | Low               | Legitimate, human-to-human benign communication                        |
 
 A compact 2×2 matrix layout:
 
@@ -188,9 +210,7 @@ A compact 2×2 matrix layout:
 
   These approaches will be compared with unimodal acoustic-only and text-only pipelines using **Precision, Recall, Macro-F1, and AUROC**. ASR performance and efficiency will be measured using **Word Error Rate (WER %)** and **Real-Time Factor (RTF)**.
 
-## 8. Key Differences
-
-## 9. References
+## 8. References
 
 - Ahuja, R., Prateek, K., & Singh, S. (2026). ICFD-31k: A large-scale dataset and benchmark for real-time conversational fraud detection. In _Proceedings of the Thirty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-26)_ (pp. 7065–7073). International Joint Conferences on Artificial Intelligence Organization. https://rishia.in/pub/ahuja2026icfd31k
 - Babu, A., Wang, C., Tjandra, A., Lakhotia, K., Xu, Q., Goyal, N., Singh, K., von Platen, P., Saraf, Y., Pino, J., Baevski, A., Conneau, A., & Auli, M. (2022). XLS-R: Self-supervised cross-lingual speech representation learning at scale. In _Proceedings of INTERSPEECH 2022_ (pp. 2278–2282). ISCA. https://arxiv.org/abs/2111.09296
