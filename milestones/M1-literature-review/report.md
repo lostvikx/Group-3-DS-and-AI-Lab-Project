@@ -1,5 +1,11 @@
 # Deepfake Voice and Scam Detection Using Deep Learning
 
+<div align="center">
+  <img src="architecture.png" alt="Proposed System Workflow Architecture" width="800">
+  <br>
+  <em>Figure 1: High-level architecture of the proposed deepfake voice and scam detection system.</em>
+</div>
+
 ## 1. Problem Statement
 
 AI-generated voices are making phone and voice-message scams harder to spot, especially in multilingual regions like India. Most people cannot tell a cloned voice from a real one, and manual verification is unreliable.
